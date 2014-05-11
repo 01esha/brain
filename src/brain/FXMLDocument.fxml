@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="brain.FXMLDocumentController">
+  <children>
+    <GridPane fx:id="gridpaneMain" gridLinesVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <Label text="Name1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">                    
+        </Label>
+        <Button text="Старт" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+        </Button>
+        <Label text="Name1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+        </Label>
+        <Button text="Стоп" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+        </Button>
+        <Label text="Фальстарт" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+        </Label>
+        <Label text="Фальстарт" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+        </Label>
+      </children>
+      <columnConstraints>
+        <ColumnConstraints minWidth="10.0" percentWidth="3.0" prefWidth="100.0" />
+        <ColumnConstraints minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+        <ColumnConstraints minWidth="10.0" percentWidth="34.0" prefWidth="100.0" />
+        <ColumnConstraints minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
+        <ColumnConstraints minWidth="10.0" percentWidth="3.0" prefWidth="100.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" />
+        <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" />
+        <RowConstraints minHeight="10.0" percentHeight="72.0" prefHeight="30.0" />
+        <RowConstraints minHeight="10.0" percentHeight="6.0" prefHeight="30.0" />
+        <RowConstraints minHeight="10.0" percentHeight="2.0" prefHeight="30.0" />
+      </rowConstraints>
+    </GridPane>
+  </children>
+</AnchorPane>
+
