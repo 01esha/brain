@@ -11,7 +11,7 @@
         <children>
         <Label fx:id="lblTeamRed" text="Name1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">                    
         </Label>
-        <Button onAction="#btnStartClick" text="Старт" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+        <Button fx:id="btnStart"  onAction="#btnStartClick" text="Старт" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
         </Button>
         <Label fx:id="lblTeamGreen" text="Name1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
         </Label>
@@ -21,6 +21,8 @@
         </Label>
         <Label fx:id="lblFalseRed" text="Фальстарт" textFill="#cc3300" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
         </Label>
+        <Button fx:id="btnCont" disable="true" onAction="#btnContClick" text="Продолжить" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+        </Button>
       </children>
       <columnConstraints>
         <ColumnConstraints minWidth="10.0" percentWidth="3.0" prefWidth="100.0" />

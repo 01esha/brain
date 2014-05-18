@@ -36,6 +36,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import static javafx.scene.input.KeyCode.SPACE;
@@ -55,7 +56,8 @@ public class FXMLDocumentController implements Initializable {
    @FXML public Label lblTeamGreen;
    @FXML public Label lblFalseGreen;
    @FXML public Label lblFalseRed;
-   
+   @FXML public Button btnCont;
+   @FXML public Button btnStart;
    
    public SimpleGauge controlTimer;  
    private long                lastTimerCall;
@@ -64,10 +66,11 @@ public class FXMLDocumentController implements Initializable {
    public Led redLed;
    public Timer timer ;
    public boolean bTimerStart = false;
-   public KeyCode keyTeamRed =  KeyCode.SPACE;
+   public KeyCode keyTeamRed =  KeyCode.CONTROL;
    public KeyCode keyTeamGreen =  KeyCode.ALT;
    public boolean bredpush = false;
    public boolean bgreenpush = false;
+   public boolean btnblock = false;
    
    
    
@@ -119,23 +122,34 @@ public class FXMLDocumentController implements Initializable {
     gridpaneMain.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {                
-                if (event.getCode() == keyTeamRed && !bredpush) {
+                if (event.getCode() == keyTeamRed && !bredpush &&!btnblock) {
                     if (bTimerStart) {
-                        
+                        btnblock = true;
+                        bredpush = true;
                         redLed.setOn(true);
+                        timer.cancel();
                     }
                     else{
-                        lblFalseRed.setVisible(true);
-                        redLed.setBlinking(true);                        
+                        btnblock = true;
+                        lblFalseRed.setVisible(true);                        
+                        redLed.setBlinking(true);
+                        btnCont.setDisable(false);
+                        bredpush = true;
                     }
                 } else 
-                    if (event.getCode() == keyTeamGreen && !bgreenpush){
+                    if (event.getCode() == keyTeamGreen && !bgreenpush &&!btnblock){
                         if (bTimerStart){
+                            btnblock = true;
+                            bgreenpush = true;
                             greenLed.setOn(true);
+                            timer.cancel();
                         }
                         else{ 
+                            btnblock = true;
                             lblFalseGreen.setVisible(true);
                             greenLed.setBlinking(true);                        
+                            btnCont.setDisable(false);
+                            bgreenpush = true;
                         }
             }
             }});
@@ -143,8 +157,9 @@ public class FXMLDocumentController implements Initializable {
     
     } 
     
-    @FXML protected void btnStartClick(ActionEvent event) {
-    lastTimerCall = System.nanoTime();
+    @FXML protected void btnStartClick() {
+    btnStart.setDisable(true);
+        lastTimerCall = System.nanoTime();
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -157,11 +172,38 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML protected void btnStopClick(ActionEvent event) {
+       /* 
         timer.cancel();
         bTimerStart = false;
         //controlTimer.setValue(0);
         double  d = (System.nanoTime()-lastTimerCall)/1000000000.0;
         DecimalFormat format = new DecimalFormat("##.####"); 
         controlTimer.setTitle(String.valueOf(format.format(d)));
+               */
+    timer.cancel();
+    timer = null;
+    bTimerStart = false;   
+    bredpush = false;
+    bgreenpush = false;
+    btnblock = false;
+    lblFalseGreen.setVisible(false);
+    lblFalseRed.setVisible(false); 
+    redLed.setOn(false);
+    greenLed.setOn(false);
+    controlTimer.setValue(0);    
     }
+     @FXML protected void btnContClick(ActionEvent event) {
+     if (!bTimerStart){
+        btnblock = false;
+        btnCont.setDisable(true);                
+        if (bredpush)
+             redLed.setBlinking(false);
+        if (bgreenpush)
+            greenLed.setBlinking(false);
+     }
+     else {
+     btnStartClick();
+        }
+     }
+    
 }
