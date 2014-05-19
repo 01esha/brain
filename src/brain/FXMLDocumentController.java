@@ -128,6 +128,7 @@ public class FXMLDocumentController implements Initializable {
                         bredpush = true;
                         redLed.setOn(true);
                         timer.cancel();
+                        btnCont.setDisable(false);
                     }
                     else{
                         btnblock = true;
@@ -135,6 +136,7 @@ public class FXMLDocumentController implements Initializable {
                         redLed.setBlinking(true);
                         btnCont.setDisable(false);
                         bredpush = true;
+                        btnStart.setDisable(true);
                     }
                 } else 
                     if (event.getCode() == keyTeamGreen && !bgreenpush &&!btnblock){
@@ -143,6 +145,7 @@ public class FXMLDocumentController implements Initializable {
                             bgreenpush = true;
                             greenLed.setOn(true);
                             timer.cancel();
+                            btnCont.setDisable(false);
                         }
                         else{ 
                             btnblock = true;
@@ -150,6 +153,7 @@ public class FXMLDocumentController implements Initializable {
                             greenLed.setBlinking(true);                        
                             btnCont.setDisable(false);
                             bgreenpush = true;
+                            btnStart.setDisable(true);
                         }
             }
             }});
@@ -180,8 +184,7 @@ public class FXMLDocumentController implements Initializable {
         DecimalFormat format = new DecimalFormat("##.####"); 
         controlTimer.setTitle(String.valueOf(format.format(d)));
                */
-    timer.cancel();
-    timer = null;
+    if (bTimerStart) timer.cancel();    
     bTimerStart = false;   
     bredpush = false;
     bgreenpush = false;
@@ -189,21 +192,33 @@ public class FXMLDocumentController implements Initializable {
     lblFalseGreen.setVisible(false);
     lblFalseRed.setVisible(false); 
     redLed.setOn(false);
+    redLed.setBlinking(false);
     greenLed.setOn(false);
-    controlTimer.setValue(0);    
+    greenLed.setBlinking(false);
+    controlTimer.setValue(0);
+    btnStart.setDisable(false);
+    btnCont.setDisable(true);       
     }
-     @FXML protected void btnContClick(ActionEvent event) {
+    
+    @FXML protected void btnContClick(ActionEvent event) {
      if (!bTimerStart){
         btnblock = false;
+        btnStart.setDisable(false);
         btnCont.setDisable(true);                
         if (bredpush)
              redLed.setBlinking(false);
         if (bgreenpush)
             greenLed.setBlinking(false);
      }
-     else {
-     btnStartClick();
+     else {        
+        btnblock = false;
+        if (bredpush)
+             redLed.setOn(false);
+        if (bgreenpush)
+            greenLed.setOn(false);
+        btnStartClick();        
         }
+     btnCont.setDisable(true); 
      }
     
 }
