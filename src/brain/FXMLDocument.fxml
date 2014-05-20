@@ -3,25 +3,28 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brain.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="1000.0" stylesheets="@Buttons.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brain.FXMLDocumentController">
   <children>
     <GridPane fx:id="gridpaneMain" gridLinesVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       
         <children>
-        <Label fx:id="lblTeamRed" text="Name1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">                    
+        <Label fx:id="lblTeamRed" id="teamname" text="Name1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">                    
         </Label>
-        <Button fx:id="btnStart"  onAction="#btnStartClick" text="Старт" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+        <Button id="glass-grey" fx:id="btnStart" onAction="#btnStartClick" text="Старт" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
         </Button>
-        <Label fx:id="lblTeamGreen" text="Name1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+        <Label fx:id="lblTeamGreen" id="teamname" text="Name1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
         </Label>
-        <Button onAction="#btnStopClick" text="Стоп" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+        <Button id="glass-grey" contentDisplay="CENTER" onAction="#btnStopClick" text="Сброс" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
         </Button>
-        <Label fx:id="lblFalseGreen" text="Фальстарт" textFill="#cc3300" visible="false" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+        <Label fx:id="lblFalseGreen" id="falselabel" text="Фальстарт" textFill="#cc3300" visible="false" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
         </Label>
-        <Label fx:id="lblFalseRed" text="Фальстарт" textFill="#cc3300" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+        <Label fx:id="lblFalseRed" id="falselabel"  text="Фальстарт" textFill="#cc3300" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+          
         </Label>
-        <Button fx:id="btnCont" disable="true" onAction="#btnContClick" text="Продолжить" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+
+        <Button id="glass-grey" fx:id="btnCont" disable="true" onAction="#btnContClick" text="Продолжить" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
         </Button>
       </children>
       <columnConstraints>
