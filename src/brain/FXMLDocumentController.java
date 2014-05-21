@@ -6,32 +6,16 @@
 
 package brain;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
-import eu.hansolo.enzo.clock.Clock;
-import eu.hansolo.enzo.clock.ClockBuilder;
 import eu.hansolo.enzo.common.Section;
-import eu.hansolo.enzo.gauge.Gauge;
-import eu.hansolo.enzo.gauge.GaugeBuilder;
 import eu.hansolo.enzo.gauge.SimpleGauge;
 import eu.hansolo.enzo.gauge.SimpleGaugeBuilder;
 import eu.hansolo.enzo.led.Led;
 import eu.hansolo.enzo.led.LedBuilder;
 
-import java.awt.Insets;
-import java.awt.event.KeyAdapter;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
-import javafx.animation.AnimationTimer;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.animation.TimelineBuilder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,11 +23,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import static javafx.scene.input.KeyCode.SPACE;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 /**
  *
@@ -76,7 +58,8 @@ public class FXMLDocumentController implements Initializable {
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    gridpaneMain.requestFocus();
+    
+        gridpaneMain.requestFocus();
         greenLed =          LedBuilder.create()
                                    .ledColor(Color.GREENYELLOW)
                                    .frameVisible(true)
@@ -128,7 +111,7 @@ public class FXMLDocumentController implements Initializable {
                         bredpush = true;
                         redLed.setOn(true);
                         timer.cancel();
-                        btnCont.setDisable(false);
+                        if (!bgreenpush) btnCont.setDisable(false);
                     }
                     else{
                         btnblock = true;
@@ -145,7 +128,7 @@ public class FXMLDocumentController implements Initializable {
                             bgreenpush = true;
                             greenLed.setOn(true);
                             timer.cancel();
-                            btnCont.setDisable(false);
+                            if (!bredpush) btnCont.setDisable(false);
                         }
                         else{ 
                             btnblock = true;

@@ -6,12 +6,10 @@
 
 package brain;
 
-import eu.hansolo.enzo.experimental.led.Led;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 /**
