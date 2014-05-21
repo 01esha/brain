@@ -33,13 +33,12 @@
         </AnchorPane>
         <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.valignment="TOP">
           <children>
-            <Label id="falselabel" fx:id="lblFalseGreen" text="Фальстарт" visible="false" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="6.0">             
-            </Label>
+            <Label id="falselabel" fx:id="lblFalseGreen" text="Фальстарт" visible="false" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="6.0" />
           </children>
         </AnchorPane>
         <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
           <children>
-            <Label id="falselabel" fx:id="lblFalseRed" text="Фальстарт" textFill="$x1" visible="false" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="5.0" />
+            <Label id="falselabel" fx:id="lblFalseRed" text="Фальстарт" textFill="BLACK" visible="false" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="5.0" />
           </children>
         </AnchorPane>
         <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="TOP">
@@ -47,6 +46,7 @@
             <Button id="glass-grey" fx:id="btnCont" disable="true" onAction="#btnContClick" text="Продолжить" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="3.0" />
           </children>
         </AnchorPane>
+        <Button id="gear" contentDisplay="CENTER" prefHeight="30.0" prefWidth="30.0" text="" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
       </children>
       <columnConstraints>
         <ColumnConstraints minWidth="10.0" percentWidth="3.0" prefWidth="100.0" />
