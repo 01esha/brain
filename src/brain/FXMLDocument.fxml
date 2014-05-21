@@ -1,32 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import java.net.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="1000.0" stylesheets="@Buttons.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brain.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="brain.FXMLDocumentController">
   <children>
     <GridPane fx:id="gridpaneMain" gridLinesVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      
-        <children>
-        <Label fx:id="lblTeamRed" id="teamname" text="Name1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">                    
-        </Label>
-        <Button id="glass-grey" fx:id="btnStart" onAction="#btnStartClick" text="Старт" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-        </Button>
-        <Label fx:id="lblTeamGreen" id="teamname" text="Name1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
-        </Label>
-        <Button id="glass-grey" contentDisplay="CENTER" onAction="#btnStopClick" text="Сброс" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-        </Button>
-        <Label fx:id="lblFalseGreen" id="falselabel" text="Фальстарт" textFill="#cc3300" visible="false" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-        </Label>
-        <Label fx:id="lblFalseRed" id="falselabel"  text="Фальстарт" textFill="#cc3300" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-          
-        </Label>
-
-        <Button id="glass-grey" fx:id="btnCont" disable="true" onAction="#btnContClick" text="Продолжить" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-        </Button>
+      <children>
+        <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.valignment="TOP">
+          <children>
+            <Label id="teamname" fx:id="lblTeamRed" alignment="CENTER" text="Name1" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="1.0" />
+          </children>
+        </AnchorPane>
+        <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP">
+          <children>
+            <Button id="glass-grey" fx:id="btnStart" onAction="#btnStartClick" text="Старт" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="126.0" AnchorPane.topAnchor="3.0" />
+          </children>
+        </AnchorPane>
+        <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="0" GridPane.valignment="TOP">
+          <children>
+            <Label id="teamname" fx:id="lblTeamGreen" alignment="CENTER" text="Name1" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="0.0" />
+          </children>
+        </AnchorPane>
+        <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="3" GridPane.valignment="TOP">
+          <children>
+            <Button id="glass-grey" contentDisplay="CENTER" onAction="#btnStopClick" text="Сброс" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="121.0" AnchorPane.rightAnchor="124.0" AnchorPane.topAnchor="3.0" />
+          </children>
+        </AnchorPane>
+        <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.valignment="TOP">
+          <children>
+            <Label id="falselabel" fx:id="lblFalseGreen" text="Фальстарт" visible="false" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="6.0">             
+            </Label>
+          </children>
+        </AnchorPane>
+        <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
+          <children>
+            <Label id="falselabel" fx:id="lblFalseRed" text="Фальстарт" textFill="$x1" visible="false" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="5.0" />
+          </children>
+        </AnchorPane>
+        <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="TOP">
+          <children>
+            <Button id="glass-grey" fx:id="btnCont" disable="true" onAction="#btnContClick" text="Продолжить" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="3.0" />
+          </children>
+        </AnchorPane>
       </children>
       <columnConstraints>
         <ColumnConstraints minWidth="10.0" percentWidth="3.0" prefWidth="100.0" />
@@ -44,4 +64,7 @@
       </rowConstraints>
     </GridPane>
   </children>
+  <stylesheets>
+    <URL value="@Buttons.css" />
+  </stylesheets>
 </AnchorPane>
