@@ -46,7 +46,7 @@
             <Button id="glass-grey" fx:id="btnCont" disable="true" onAction="#btnContClick" text="Продолжить" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="123.0" AnchorPane.rightAnchor="127.0" AnchorPane.topAnchor="3.0" />
           </children>
         </AnchorPane>
-        <Button id="gear" contentDisplay="CENTER" prefHeight="30.0" prefWidth="30.0" text="" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+        <Button id="gear" onAction="#btnPropertyClick" contentDisplay="CENTER" prefHeight="30.0" prefWidth="30.0" text="" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
       </children>
       <columnConstraints>
         <ColumnConstraints minWidth="10.0" percentWidth="3.0" prefWidth="100.0" />

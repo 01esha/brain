@@ -6,26 +6,38 @@
 
 package brain;
 
+
 import eu.hansolo.enzo.common.Section;
 import eu.hansolo.enzo.gauge.SimpleGauge;
 import eu.hansolo.enzo.gauge.SimpleGaugeBuilder;
 import eu.hansolo.enzo.led.Led;
 import eu.hansolo.enzo.led.LedBuilder;
-
+import java.awt.Insets;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -58,6 +70,7 @@ public class FXMLDocumentController implements Initializable {
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    
     
         gridpaneMain.requestFocus();
         greenLed =          LedBuilder.create()
@@ -203,5 +216,30 @@ public class FXMLDocumentController implements Initializable {
         }
      btnCont.setDisable(true); 
      }
-    
+   
+    @FXML protected void btnPropertyClick(ActionEvent event) {
+      if (!bTimerStart){
+                Label secondLabel = new Label("Hello");
+                
+                Button okButton = new Button("CLOSE");
+                 okButton.setOnAction(new EventHandler<ActionEvent>(){ 
+                  @Override
+                  public void handle(ActionEvent arg0) {   
+                   lblTeamGreen.setText("ututu");
+                  }                 
+                });
+                StackPane secondaryLayout = new StackPane();
+                secondaryLayout.getChildren().addAll(secondLabel, okButton);
+                 
+                Scene secondScene = new Scene(secondaryLayout, 200, 100);
+ 
+                Stage secondStage = new Stage(StageStyle.UTILITY);
+                secondStage.setTitle("Second Stage");
+                secondStage.setScene(secondScene);
+                 
+                
+  
+                secondStage.show();
+        }  
+    }
 }

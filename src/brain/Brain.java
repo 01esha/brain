@@ -18,11 +18,13 @@ import javafx.stage.Stage;
  */
 public class Brain extends Application {
         
-       
+    public static String parameters;   
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-               
+        
+        parameters = getParameters().getNamed().toString();
+        
         Scene scene = new Scene(root);        
         stage.setScene(scene);
         stage.show();
