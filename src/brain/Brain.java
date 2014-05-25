@@ -23,7 +23,7 @@ public class Brain extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
-        parameters = getParameters().getNamed().toString();
+        //parameters = getParameters().getNamed().toString();
         
         Scene scene = new Scene(root);        
         stage.setScene(scene);

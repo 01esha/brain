@@ -2,17 +2,17 @@
     
 }
 #falselabel {
-  -fx-fill: FIREBRICK;
+  -fx-text-fill: #FF0000;
   -fx-font-size: 25px;
+  -fx-font-family: "Arial Black";
   -fx-font-weight: bold;
   -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.7) , 2, 0.0 , 0 , 1 );  
 }
 #teamname {
    -fx-font-size: 32px;
-   -fx-font-family: "Arial Black";
-   -fx-fill: #818181;
+   -fx-font-family: "Arial Black";   
    -fx-text-fill: #838B8B;
-   -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.7) , 2, 0.0 , 0 , 1 );
+   -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.7) , 2, 0.0 , 0 , 2 );
 }
 
 

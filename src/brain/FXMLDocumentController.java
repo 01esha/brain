@@ -12,32 +12,43 @@ import eu.hansolo.enzo.gauge.SimpleGauge;
 import eu.hansolo.enzo.gauge.SimpleGaugeBuilder;
 import eu.hansolo.enzo.led.Led;
 import eu.hansolo.enzo.led.LedBuilder;
-import java.awt.Insets;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
+import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBuilder;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBoxBuilder;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
+
 
 /**
  *
@@ -65,8 +76,9 @@ public class FXMLDocumentController implements Initializable {
    public boolean bredpush = false;
    public boolean bgreenpush = false;
    public boolean btnblock = false;
-   
-   
+   public int iTimeRemain = 0;
+   private int iTimeCount = 0;
+ 
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -100,10 +112,12 @@ public class FXMLDocumentController implements Initializable {
                                         .title("Время")
                                         .unit("сек")
                                         .value(0.0)                     
-                                        .maxValue(60)
+                                        .maxValue(60)            
                                         .animationDuration(500)
                                         .build();
+        
     gridpaneMain.add(controlTimer,2,2);
+    
     /*
     lastTimerCall = System.nanoTime(); //  + 500_000_000l
         timer = new AnimationTimer() {
@@ -157,20 +171,31 @@ public class FXMLDocumentController implements Initializable {
     
     } 
     
-    @FXML protected void btnStartClick() {
-    btnStart.setDisable(true);
-        lastTimerCall = System.nanoTime();
-        timer = new Timer();
+    @FXML protected void btnStartClick() {    
+      
+       if (controlTimer.getValue()>0.0 && iTimeRemain>0)        
+       controlTimer.setValue(50.0); 
+      
+       setTimeRemain (); 
+    }
+
+    private void setTimeRemain (){
+   btnStart.setDisable(true);
+       lastTimerCall = System.nanoTime();
+       timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                controlTimer.setValue(controlTimer.getValue()+1.0); 
-            }
+               controlTimer.setValue(controlTimer.getValue()+1.0);                    
+;            }
         }; 
-    timer.schedule(timerTask, 0, 1000);
-    bTimerStart = true; 
+        timer.schedule(timerTask, 0, 1000);
+     bTimerStart = true;
+        
+        
+        
     }
-
+    
     @FXML protected void btnStopClick(ActionEvent event) {
        /* 
         timer.cancel();
@@ -191,7 +216,7 @@ public class FXMLDocumentController implements Initializable {
     redLed.setBlinking(false);
     greenLed.setOn(false);
     greenLed.setBlinking(false);
-    controlTimer.setValue(0);
+    controlTimer.setValue(0.0);    
     btnStart.setDisable(false);
     btnCont.setDisable(true);       
     }
@@ -207,11 +232,11 @@ public class FXMLDocumentController implements Initializable {
             greenLed.setBlinking(false);
      }
      else {        
-        btnblock = false;
+        btnblock = false;        
         if (bredpush)
              redLed.setOn(false);
         if (bgreenpush)
-            greenLed.setOn(false);
+            greenLed.setOn(false);                                      
         btnStartClick();        
         }
      btnCont.setDisable(true); 
@@ -219,26 +244,98 @@ public class FXMLDocumentController implements Initializable {
    
     @FXML protected void btnPropertyClick(ActionEvent event) {
       if (!bTimerStart){
-                Label secondLabel = new Label("Hello");
+        
+          
+        GridPane gridPane = new GridPane();
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setPercentWidth(50);
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setPercentWidth(50);
+        gridPane.getColumnConstraints().addAll(column1, column2);
+        gridPane.setPadding(new javafx.geometry.Insets (10));
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+                Scene secondScene = new Scene(gridPane, 400, 250); 
+                Stage secondStage = new Stage(StageStyle.UTILITY);
+                secondStage.setTitle("Настройки");
+                secondStage.setScene(secondScene);
+                secondStage.setResizable(false);   
+                secondScene.getStylesheets().add(getClass().getResource("Buttons.css").toExternalForm());
                 
-                Button okButton = new Button("CLOSE");
+        Label lbRedTeamName = new Label("Название 1-й команды:");
+        lbRedTeamName.setTextFill(Color.web("#CC0000"));
+        GridPane.setHalignment(lbRedTeamName, HPos.LEFT);        
+        
+        TextField tfRedTeamName = new TextField();        
+        GridPane.setHalignment(lbRedTeamName, HPos.LEFT);
+
+        Label lbGreenTeamName = new Label("Название 2-й команды:");
+        lbGreenTeamName.setTextFill(Color.web("#336600"));
+        GridPane.setHalignment(lbGreenTeamName, HPos.LEFT);        
+        
+        TextField tfGreenTeamName = new TextField();
+        GridPane.setHalignment(tfGreenTeamName, HPos.LEFT);
+        
+        ToggleGroup groupRB = new ToggleGroup();        
+        Label groupLabel = new Label("После неправильного ответа команды");               
+        RadioButton rbFull = new RadioButton("использовать все оставшееся время");
+        rbFull.setToggleGroup(groupRB);
+        rbFull.setSelected(true);        
+        RadioButton rbTime = new RadioButton("давать на обсуждение сек.:");
+        rbTime.setToggleGroup(groupRB);
+        
+        ChoiceBox cbTime = new ChoiceBox(FXCollections.observableArrayList(
+            "5", "10", "15", "20", "25", "30")
+            );
+        cbTime.getSelectionModel().selectFirst();
+        cbTime.setPadding(new javafx.geometry.Insets(0,0,0,5));
+        HBox hbox = new HBox();       
+        hbox.getChildren().addAll(rbTime, cbTime);
+        Separator separatorTop = new Separator();
+        Separator separatorBottom = new Separator();
+        VBox vb = new VBox();
+        vb.setSpacing(5.0);        
+        vb.getChildren().addAll(separatorTop, groupLabel,rbFull,hbox,separatorBottom);
+            
+                Button okButton = new Button("Сохранить");
+                okButton.setId("glass-grey");
                  okButton.setOnAction(new EventHandler<ActionEvent>(){ 
                   @Override
                   public void handle(ActionEvent arg0) {   
-                   lblTeamGreen.setText("ututu");
+                   if (tfGreenTeamName.getText().length()>0 && tfGreenTeamName.getText().length() < 20)
+                       lblTeamGreen.setText(tfGreenTeamName.getText());
+                   if (tfGreenTeamName.getText().length() >= 20)
+                      lblTeamGreen.setText(tfGreenTeamName.getText().substring(0, 19));
+                   if (tfRedTeamName.getText().length()>0 && tfRedTeamName.getText().length() < 20)
+                       lblTeamRed.setText(tfRedTeamName.getText());
+                   if (tfRedTeamName.getText().length() >= 20)
+                       lblTeamRed.setText(tfRedTeamName.getText().substring(0, 19));
+                   if (groupRB.getSelectedToggle() == rbTime)
+                       iTimeRemain =  java.lang.Integer.parseInt(cbTime.getValue().toString());
                   }                 
                 });
-                StackPane secondaryLayout = new StackPane();
-                secondaryLayout.getChildren().addAll(secondLabel, okButton);
                  
-                Scene secondScene = new Scene(secondaryLayout, 200, 100);
- 
-                Stage secondStage = new Stage(StageStyle.UTILITY);
-                secondStage.setTitle("Second Stage");
-                secondStage.setScene(secondScene);
+                 Button noButton = new Button("Отмена");
+                 noButton.setId("glass-grey");
+                 noButton.setOnAction(new EventHandler<ActionEvent>(){ 
+                  @Override
+                  public void handle(ActionEvent arg0) {   
+                  secondStage.close();
+                  }                 
+                });
                  
                 
-  
+                gridPane.add(lbRedTeamName, 0, 0);
+                gridPane.add(tfRedTeamName, 1, 0); 
+                gridPane.add(lbGreenTeamName, 0, 1);
+                gridPane.add(tfGreenTeamName, 1, 1);        
+                gridPane.add(vb, 0, 2,2,1);
+                gridPane.add(okButton, 0,3);  
+                gridPane.add(noButton, 1,3);  
+                gridPane.setHalignment(okButton, HPos.CENTER);
+                gridPane.setHalignment(noButton, HPos.CENTER);
+                
+                
                 secondStage.show();
         }  
     }
