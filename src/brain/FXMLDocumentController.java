@@ -12,6 +12,7 @@ import eu.hansolo.enzo.gauge.SimpleGauge;
 import eu.hansolo.enzo.gauge.SimpleGaugeBuilder;
 import eu.hansolo.enzo.led.Led;
 import eu.hansolo.enzo.led.LedBuilder;
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -27,6 +28,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
@@ -44,6 +46,9 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -63,6 +68,7 @@ public class FXMLDocumentController implements Initializable {
    @FXML public Label lblFalseRed;
    @FXML public Button btnCont;
    @FXML public Button btnStart;
+   @FXML public Label lblTimeOff;
    
    public SimpleGauge controlTimer;  
    private long                lastTimerCall;
@@ -134,6 +140,7 @@ public class FXMLDocumentController implements Initializable {
             public void handle(KeyEvent event) {                
                 if (event.getCode() == keyTeamRed && !bredpush &&!btnblock) {
                     if (bTimerStart) {
+                        playsignal("/sound/push.mp3");
                         btnblock = true;
                         bredpush = true;
                         redLed.setOn(true);
@@ -141,6 +148,7 @@ public class FXMLDocumentController implements Initializable {
                         if (!bgreenpush) btnCont.setDisable(false);
                     }
                     else{
+                        playsignal("/sound/falsestart.mp3");
                         btnblock = true;
                         lblFalseRed.setVisible(true);                        
                         redLed.setBlinking(true);
@@ -151,6 +159,7 @@ public class FXMLDocumentController implements Initializable {
                 } else 
                     if (event.getCode() == keyTeamGreen && !bgreenpush &&!btnblock){
                         if (bTimerStart){
+                            playsignal("/sound/push.mp3");
                             btnblock = true;
                             bgreenpush = true;
                             greenLed.setOn(true);
@@ -158,6 +167,7 @@ public class FXMLDocumentController implements Initializable {
                             if (!bredpush) btnCont.setDisable(false);
                         }
                         else{ 
+                            playsignal("/sound/falsestart.mp3");
                             btnblock = true;
                             lblFalseGreen.setVisible(true);
                             greenLed.setBlinking(true);                        
@@ -172,29 +182,24 @@ public class FXMLDocumentController implements Initializable {
     } 
     
     @FXML protected void btnStartClick() {    
-      
-       if (controlTimer.getValue()>0.0 && iTimeRemain>0)        
-       controlTimer.setValue(50.0); 
-      
-       setTimeRemain (); 
-    }
-
-    private void setTimeRemain (){
-   btnStart.setDisable(true);
+       btnStart.setDisable(true);       
        lastTimerCall = System.nanoTime();
+       playsignal("/sound/start.mp3");
        timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-               controlTimer.setValue(controlTimer.getValue()+1.0);                    
+               /*if (controlTimer.getValue() == controlTimer.getMaxValue()){
+                   lblTimeOff.setVisible(true);
+                   //timer.cancel();
+               } 
+               else */controlTimer.setValue(controlTimer.getValue()+1.0);               
 ;            }
         }; 
         timer.schedule(timerTask, 0, 1000);
-     bTimerStart = true;
-        
-        
-        
+     bTimerStart = true;      
     }
+    
     
     @FXML protected void btnStopClick(ActionEvent event) {
        /* 
@@ -218,7 +223,8 @@ public class FXMLDocumentController implements Initializable {
     greenLed.setBlinking(false);
     controlTimer.setValue(0.0);    
     btnStart.setDisable(false);
-    btnCont.setDisable(true);       
+    btnCont.setDisable(true);
+    lblTimeOff.setVisible(false);
     }
     
     @FXML protected void btnContClick(ActionEvent event) {
@@ -255,7 +261,7 @@ public class FXMLDocumentController implements Initializable {
         gridPane.setPadding(new javafx.geometry.Insets (10));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-                Scene secondScene = new Scene(gridPane, 400, 250); 
+                Scene secondScene = new Scene(gridPane, 400, 400); 
                 Stage secondStage = new Stage(StageStyle.UTILITY);
                 secondStage.setTitle("Настройки");
                 secondStage.setScene(secondScene);
@@ -266,7 +272,8 @@ public class FXMLDocumentController implements Initializable {
         lbRedTeamName.setTextFill(Color.web("#CC0000"));
         GridPane.setHalignment(lbRedTeamName, HPos.LEFT);        
         
-        TextField tfRedTeamName = new TextField();        
+        TextField tfRedTeamName = new TextField(); 
+        tfRedTeamName.setText(lblTeamRed.getText());
         GridPane.setHalignment(lbRedTeamName, HPos.LEFT);
 
         Label lbGreenTeamName = new Label("Название 2-й команды:");
@@ -274,7 +281,31 @@ public class FXMLDocumentController implements Initializable {
         GridPane.setHalignment(lbGreenTeamName, HPos.LEFT);        
         
         TextField tfGreenTeamName = new TextField();
+        tfGreenTeamName.setText(lblTeamGreen.getText());
         GridPane.setHalignment(tfGreenTeamName, HPos.LEFT);
+        
+        Label lbRedKey = new Label("Кнопка 1-й команды:");
+        lbRedKey.setTextFill(Color.web("#CC0000"));
+        GridPane.setHalignment(lbRedKey, HPos.LEFT);        
+        
+        TextField tfRedKey = new TextField();        
+        tfRedKey.addEventFilter(KeyEvent.KEY_PRESSED, new javafx.event.EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+            keyTeamRed = ke.getCode();
+            tfRedKey.clear();
+            tfRedKey.setText(keyTeamRed.toString());
+            }});
+        tfRedKey.setPromptText(keyTeamRed.toString());
+        GridPane.setHalignment(lbRedTeamName, HPos.LEFT);
+        
+        Label lbGreenKey = new Label("Кнопка 2-й команды:");
+        lbGreenKey.setTextFill(Color.web("#336600"));
+        GridPane.setHalignment(lbGreenKey, HPos.LEFT);        
+        
+        TextField tfGreenKey = new TextField(); 
+        tfGreenKey.setText(keyTeamGreen.toString());
+        GridPane.setHalignment(tfGreenKey, HPos.LEFT);
         
         ToggleGroup groupRB = new ToggleGroup();        
         Label groupLabel = new Label("После неправильного ответа команды");               
@@ -312,6 +343,7 @@ public class FXMLDocumentController implements Initializable {
                        lblTeamRed.setText(tfRedTeamName.getText().substring(0, 19));
                    if (groupRB.getSelectedToggle() == rbTime)
                        iTimeRemain =  java.lang.Integer.parseInt(cbTime.getValue().toString());
+                   secondStage.close();
                   }                 
                 });
                  
@@ -328,15 +360,29 @@ public class FXMLDocumentController implements Initializable {
                 gridPane.add(lbRedTeamName, 0, 0);
                 gridPane.add(tfRedTeamName, 1, 0); 
                 gridPane.add(lbGreenTeamName, 0, 1);
-                gridPane.add(tfGreenTeamName, 1, 1);        
-                gridPane.add(vb, 0, 2,2,1);
-                gridPane.add(okButton, 0,3);  
-                gridPane.add(noButton, 1,3);  
+                gridPane.add(tfGreenTeamName, 1, 1);
+                gridPane.add(lbRedKey, 0, 2);
+                gridPane.add(tfRedKey, 1, 2);
+                gridPane.add(lbGreenKey, 0, 3);
+                gridPane.add(tfGreenKey, 1, 3);
+                gridPane.add(vb, 0, 4,2,1);
+                gridPane.add(okButton, 0,5);  
+                gridPane.add(noButton, 1,5);  
                 gridPane.setHalignment(okButton, HPos.CENTER);
                 gridPane.setHalignment(noButton, HPos.CENTER);
                 
                 
                 secondStage.show();
-        }  
+        }       
     }
+    private void playsignal (String path){
+        /*String source =  "push.mp3";
+        Media media = null;
+        media = new Media(source);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();*/
+       Media someSound = new Media(getClass().getResource(path).toString());
+        MediaPlayer mp = new MediaPlayer(someSound);
+        mp.play();
+      }
 }

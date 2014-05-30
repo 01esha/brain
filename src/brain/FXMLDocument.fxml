@@ -11,7 +11,7 @@
       <children>
         <AnchorPane id="AnchorPane" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
           <children>
-            <Label id="teamname" fx:id="lblTeamRed" alignment="CENTER" contentDisplay="CENTER" text="Команда №1" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="1.0" />
+            <Label id="teamname" fx:id="lblTeamRed" alignment="CENTER" contentDisplay="CENTER" text="Команда №1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
           </children>
         </AnchorPane>
         <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP">
@@ -21,7 +21,7 @@
         </AnchorPane>
         <AnchorPane id="AnchorPane" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="0">
           <children>
-            <Label id="teamname" fx:id="lblTeamGreen" alignment="CENTER" text="Команда №2" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="0.0" />
+            <Label id="teamname" fx:id="lblTeamGreen" alignment="CENTER" text="Команда №2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
           </children>
         </AnchorPane>
         <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="3" GridPane.valignment="TOP">
@@ -31,12 +31,12 @@
         </AnchorPane>
         <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.valignment="TOP">
           <children>
-            <Label id="falselabel" fx:id="lblFalseGreen" alignment="CENTER" contentDisplay="CENTER" text="Фальстарт" visible="false" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="6.0" />
+            <Label id="falselabel" fx:id="lblFalseGreen" alignment="CENTER" contentDisplay="CENTER" text="Фальстарт" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
           </children>
         </AnchorPane>
         <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
           <children>
-            <Label id="falselabel" fx:id="lblFalseRed" alignment="CENTER" contentDisplay="CENTER" text="Фальстарт" textFill="BLACK" visible="false" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="88.0" AnchorPane.topAnchor="5.0" />
+            <Label id="falselabel" fx:id="lblFalseRed" alignment="CENTER" contentDisplay="CENTER" text="Фальстарт" textFill="BLACK" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
           </children>
         </AnchorPane>
         <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="TOP">
@@ -45,6 +45,11 @@
           </children>
         </AnchorPane>
         <Button id="gear" contentDisplay="CENTER" onAction="#btnPropertyClick" prefHeight="30.0" prefWidth="30.0" text="" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <children>
+                <Label id="falselabel" fx:id="lblTimeOff" visible="false" alignment="CENTER" contentDisplay="CENTER" text="Время истекло" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            </children>
+        </AnchorPane>
       </children>
       <columnConstraints>
         <ColumnConstraints minWidth="10.0" percentWidth="3.0" prefWidth="100.0" />
