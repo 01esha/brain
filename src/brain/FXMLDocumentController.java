@@ -12,23 +12,13 @@ import eu.hansolo.enzo.gauge.SimpleGauge;
 import eu.hansolo.enzo.gauge.SimpleGaugeBuilder;
 import eu.hansolo.enzo.led.Led;
 import eu.hansolo.enzo.led.LedBuilder;
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
-import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
@@ -46,18 +36,16 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 
 
 /**
  *
- * @author ОиО
+ * @author olesha
  */
 
 public class FXMLDocumentController implements Initializable {
@@ -72,7 +60,7 @@ public class FXMLDocumentController implements Initializable {
    
    public SimpleGauge controlTimer;  
    private long                lastTimerCall;
-   //private AnimationTimer      timer;
+   private AnimationTimer      AnimTimer;
    public Led greenLed;
    public Led redLed;
    public Timer timer ;
@@ -82,7 +70,7 @@ public class FXMLDocumentController implements Initializable {
    public boolean bredpush = false;
    public boolean bgreenpush = false;
    public boolean btnblock = false;
-   public int iTimeRemain = 0;
+   public double dTimeRemain = 0.0;
    private int iTimeCount = 0;
  
    
@@ -108,7 +96,7 @@ public class FXMLDocumentController implements Initializable {
                                    .build();
         gridpaneMain.add(redLed,1,2);   
     
-    controlTimer = SimpleGaugeBuilder.create()                                        
+        controlTimer = SimpleGaugeBuilder.create()                                        
                                         .sections(new Section(0, 50, "0"),
                                             new Section(50, 55, "1"),
                                             new Section(55, 60, "2"))
@@ -117,8 +105,8 @@ public class FXMLDocumentController implements Initializable {
                                         .sectionFill2(Color.RED)
                                         .title("Время")
                                         .unit("сек")
-                                        .value(0.0)                     
-                                        .maxValue(60)            
+                                        .value(0.0)                                                 
+                                        .maxValue(60.0)            
                                         .animationDuration(500)
                                         .build();
         
@@ -144,7 +132,8 @@ public class FXMLDocumentController implements Initializable {
                         btnblock = true;
                         bredpush = true;
                         redLed.setOn(true);
-                        timer.cancel();
+                        //timer.cancel();
+                        AnimTimer.stop();
                         if (!bgreenpush) btnCont.setDisable(false);
                     }
                     else{
@@ -163,7 +152,8 @@ public class FXMLDocumentController implements Initializable {
                             btnblock = true;
                             bgreenpush = true;
                             greenLed.setOn(true);
-                            timer.cancel();
+                            //timer.cancel();
+                            AnimTimer.stop();
                             if (!bredpush) btnCont.setDisable(false);
                         }
                         else{ 
@@ -184,33 +174,33 @@ public class FXMLDocumentController implements Initializable {
     @FXML protected void btnStartClick() {    
        btnStart.setDisable(true);       
        lastTimerCall = System.nanoTime();
-       playsignal("/sound/start.mp3");
-       timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-               /*if (controlTimer.getValue() == controlTimer.getMaxValue()){
-                   lblTimeOff.setVisible(true);
-                   //timer.cancel();
-               } 
-               else */controlTimer.setValue(controlTimer.getValue()+1.0);               
-;            }
-        }; 
-        timer.schedule(timerTask, 0, 1000);
+       playsignal("/sound/start.mp3");      
+       lastTimerCall = System.nanoTime(); 
+       AnimTimer = new AnimationTimer() {
+            @Override public void handle(long now) {
+                if (now > lastTimerCall + 1000_000_000) {
+                    controlTimer.setValue(controlTimer.getValue()+1.0);
+                    if (controlTimer.getValue() >= 60.0){
+                        lblTimeOff.setVisible(true);
+                        AnimTimer.stop();
+                        playsignal("/sound/start.mp3");
+                    }                       
+                    lastTimerCall = now;                }
+            }
+        };
+     AnimTimer.start();
      bTimerStart = true;      
     }
     
     
     @FXML protected void btnStopClick(ActionEvent event) {
-       /* 
-        timer.cancel();
-        bTimerStart = false;
-        //controlTimer.setValue(0);
+       /*        
         double  d = (System.nanoTime()-lastTimerCall)/1000000000.0;
         DecimalFormat format = new DecimalFormat("##.####"); 
         controlTimer.setTitle(String.valueOf(format.format(d)));
                */
-    if (bTimerStart) timer.cancel();    
+    if (bTimerStart) AnimTimer.stop();
+    //timer.cancel();           
     bTimerStart = false;   
     bredpush = false;
     bgreenpush = false;
@@ -242,16 +232,17 @@ public class FXMLDocumentController implements Initializable {
         if (bredpush)
              redLed.setOn(false);
         if (bgreenpush)
-            greenLed.setOn(false);                                      
-        btnStartClick();        
-        }
+            greenLed.setOn(false);
+        if (dTimeRemain > 0.0)
+            controlTimer.setValue(60.0-dTimeRemain);
+        btnStart.setDisable(false);
+        }     
      btnCont.setDisable(true); 
      }
    
     @FXML protected void btnPropertyClick(ActionEvent event) {
       if (!bTimerStart){
-        
-          
+                  
         GridPane gridPane = new GridPane();
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setPercentWidth(50);
@@ -304,7 +295,14 @@ public class FXMLDocumentController implements Initializable {
         GridPane.setHalignment(lbGreenKey, HPos.LEFT);        
         
         TextField tfGreenKey = new TextField(); 
-        tfGreenKey.setText(keyTeamGreen.toString());
+        tfGreenKey.addEventFilter(KeyEvent.KEY_PRESSED, new javafx.event.EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+            keyTeamGreen = ke.getCode();
+            tfGreenKey.clear();
+            tfGreenKey.setText(keyTeamGreen.toString());
+            }});
+        tfGreenKey.setPromptText(keyTeamGreen.toString());
         GridPane.setHalignment(tfGreenKey, HPos.LEFT);
         
         ToggleGroup groupRB = new ToggleGroup();        
@@ -342,7 +340,7 @@ public class FXMLDocumentController implements Initializable {
                    if (tfRedTeamName.getText().length() >= 20)
                        lblTeamRed.setText(tfRedTeamName.getText().substring(0, 19));
                    if (groupRB.getSelectedToggle() == rbTime)
-                       iTimeRemain =  java.lang.Integer.parseInt(cbTime.getValue().toString());
+                       dTimeRemain =  Double.parseDouble(cbTime.getValue().toString());
                    secondStage.close();
                   }                 
                 });
@@ -357,30 +355,26 @@ public class FXMLDocumentController implements Initializable {
                 });
                  
                 
-                gridPane.add(lbRedTeamName, 0, 0);
-                gridPane.add(tfRedTeamName, 1, 0); 
-                gridPane.add(lbGreenTeamName, 0, 1);
-                gridPane.add(tfGreenTeamName, 1, 1);
-                gridPane.add(lbRedKey, 0, 2);
-                gridPane.add(tfRedKey, 1, 2);
-                gridPane.add(lbGreenKey, 0, 3);
-                gridPane.add(tfGreenKey, 1, 3);
-                gridPane.add(vb, 0, 4,2,1);
-                gridPane.add(okButton, 0,5);  
-                gridPane.add(noButton, 1,5);  
-                gridPane.setHalignment(okButton, HPos.CENTER);
-                gridPane.setHalignment(noButton, HPos.CENTER);
+        gridPane.add(lbRedTeamName, 0, 0);
+        gridPane.add(tfRedTeamName, 1, 0); 
+        gridPane.add(lbGreenTeamName, 0, 1);
+        gridPane.add(tfGreenTeamName, 1, 1);
+        gridPane.add(lbRedKey, 0, 2);
+        gridPane.add(tfRedKey, 1, 2);
+        gridPane.add(lbGreenKey, 0, 3);
+        gridPane.add(tfGreenKey, 1, 3);
+        gridPane.add(vb, 0, 4,2,1);
+        gridPane.add(okButton, 0,5);  
+        gridPane.add(noButton, 1,5);  
+        gridPane.setHalignment(okButton, HPos.CENTER);
+        gridPane.setHalignment(noButton, HPos.CENTER);
                 
                 
-                secondStage.show();
+        secondStage.show();
         }       
     }
-    private void playsignal (String path){
-        /*String source =  "push.mp3";
-        Media media = null;
-        media = new Media(source);
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();*/
+    
+    private void playsignal (String path){        
        Media someSound = new Media(getClass().getResource(path).toString());
         MediaPlayer mp = new MediaPlayer(someSound);
         mp.play();

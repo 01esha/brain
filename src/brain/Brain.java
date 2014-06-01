@@ -14,17 +14,14 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author ОиО
+ * @author olesha
  */
 public class Brain extends Application {
         
     public static String parameters;   
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
-        //parameters = getParameters().getNamed().toString();
-        
+        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));      
         Scene scene = new Scene(root);        
         stage.setScene(scene);
         stage.show();
