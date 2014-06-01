@@ -81,17 +81,13 @@ public class FXMLDocumentController implements Initializable {
         gridpaneMain.requestFocus();
         greenLed =          LedBuilder.create()
                                    .ledColor(Color.GREENYELLOW)
-                                   .frameVisible(true)
-                                   //.interval(500_000_000l)
-                                   //.blinking(true)
+                                   .frameVisible(true)                                   
                                    .on(false)
                                    .build();
         gridpaneMain.add(greenLed,3,2);
         redLed =            LedBuilder.create()
                                    .ledColor(Color.RED)
-                                   .frameVisible(true)
-                                   //.interval(500_000_000l)
-                                   //.blinking(true)
+                                   .frameVisible(true)                                   
                                     .on(false)
                                    .build();
         gridpaneMain.add(redLed,1,2);   
@@ -110,19 +106,7 @@ public class FXMLDocumentController implements Initializable {
                                         .animationDuration(500)
                                         .build();
         
-    gridpaneMain.add(controlTimer,2,2);
-    
-    /*
-    lastTimerCall = System.nanoTime(); //  + 500_000_000l
-        timer = new AnimationTimer() {
-            @Override public void handle(long now) {
-                if (now > lastTimerCall + 100000000) {
-                    control.setValue(control.getValue()+1.0);                    
-                    lastTimerCall = now;
-                }
-            }
-        };
-    timer.start(); */ 
+    gridpaneMain.add(controlTimer,2,2);   
     gridpaneMain.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {                
@@ -134,6 +118,7 @@ public class FXMLDocumentController implements Initializable {
                         redLed.setOn(true);
                         //timer.cancel();
                         AnimTimer.stop();
+                        bTimerStart = false;
                         if (!bgreenpush) btnCont.setDisable(false);
                     }
                     else{
@@ -154,6 +139,7 @@ public class FXMLDocumentController implements Initializable {
                             greenLed.setOn(true);
                             //timer.cancel();
                             AnimTimer.stop();
+                            bTimerStart = false;
                             if (!bredpush) btnCont.setDisable(false);
                         }
                         else{ 
@@ -237,7 +223,7 @@ public class FXMLDocumentController implements Initializable {
             controlTimer.setValue(60.0-dTimeRemain);
         btnStart.setDisable(false);
         }     
-     btnCont.setDisable(true); 
+     btnCont.setDisable(true);     
      }
    
     @FXML protected void btnPropertyClick(ActionEvent event) {
