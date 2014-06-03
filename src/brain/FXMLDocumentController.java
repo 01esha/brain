@@ -12,7 +12,13 @@ import eu.hansolo.enzo.gauge.SimpleGauge;
 import eu.hansolo.enzo.gauge.SimpleGaugeBuilder;
 import eu.hansolo.enzo.led.Led;
 import eu.hansolo.enzo.led.LedBuilder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import javafx.animation.AnimationTimer;
@@ -24,18 +30,21 @@ import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -66,17 +75,17 @@ public class FXMLDocumentController implements Initializable {
    public Timer timer ;
    public boolean bTimerStart = false;
    public KeyCode keyTeamRed =  KeyCode.CONTROL;
-   public KeyCode keyTeamGreen =  KeyCode.ALT;
+   public KeyCode keyTeamGreen =  KeyCode.ALT;   
    public boolean bredpush = false;
    public boolean bgreenpush = false;
    public boolean btnblock = false;
    public double dTimeRemain = 0.0;
-   private int iTimeCount = 0;
- 
+   //private int iTimeCount = 0;
+   private double dTimeFull = 60.0; 
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    
+        loadParams();
     
         gridpaneMain.requestFocus();
         greenLed =          LedBuilder.create()
@@ -93,16 +102,16 @@ public class FXMLDocumentController implements Initializable {
         gridpaneMain.add(redLed,1,2);   
     
         controlTimer = SimpleGaugeBuilder.create()                                        
-                                        .sections(new Section(0, 50, "0"),
-                                            new Section(50, 55, "1"),
-                                            new Section(55, 60, "2"))
+                                        .sections(new Section(0, dTimeFull-10.0, "0"),
+                                            new Section(dTimeFull-10.0, dTimeFull-5.0, "1"),
+                                            new Section(dTimeFull-5.0, dTimeFull, "2"))
                                         .sectionFill0(Color.GREEN)
                                         .sectionFill1(Color.YELLOW)
                                         .sectionFill2(Color.RED)
                                         .title("Время")
                                         .unit("сек")
                                         .value(0.0)                                                 
-                                        .maxValue(60.0)            
+                                        .maxValue(dTimeFull)            
                                         .animationDuration(500)
                                         .build();
         
@@ -166,7 +175,7 @@ public class FXMLDocumentController implements Initializable {
             @Override public void handle(long now) {
                 if (now > lastTimerCall + 1000_000_000) {
                     controlTimer.setValue(controlTimer.getValue()+1.0);
-                    if (controlTimer.getValue() >= 60.0){
+                    if (controlTimer.getValue() >= dTimeFull){
                         lblTimeOff.setVisible(true);
                         AnimTimer.stop();
                         playsignal("/sound/start.mp3");
@@ -269,7 +278,7 @@ public class FXMLDocumentController implements Initializable {
         tfRedKey.addEventFilter(KeyEvent.KEY_PRESSED, new javafx.event.EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent ke) {
-            keyTeamRed = ke.getCode();
+            keyTeamRed = ke.getCode();            
             tfRedKey.clear();
             tfRedKey.setText(keyTeamRed.toString());
             }});
@@ -298,7 +307,10 @@ public class FXMLDocumentController implements Initializable {
         rbFull.setSelected(true);        
         RadioButton rbTime = new RadioButton("давать на обсуждение сек.:");
         rbTime.setToggleGroup(groupRB);
-        
+        RadioButton rbTimeFull = new RadioButton("Максимальное время на обсуждение сек.:");
+        rbTimeFull.setToggleGroup(groupRB);
+        rbTimeFull.setTooltip(new Tooltip("Применится только после перезагрузки приложения и сохранения настроек в файле конфигурации"));
+                
         ChoiceBox cbTime = new ChoiceBox(FXCollections.observableArrayList(
             "5", "10", "15", "20", "25", "30")
             );
@@ -306,12 +318,23 @@ public class FXMLDocumentController implements Initializable {
         cbTime.setPadding(new javafx.geometry.Insets(0,0,0,5));
         HBox hbox = new HBox();       
         hbox.getChildren().addAll(rbTime, cbTime);
+        ChoiceBox cbTimeFull = new ChoiceBox(FXCollections.observableArrayList(
+            "15", "20", "25", "30")
+            );
+        cbTimeFull.getSelectionModel().select(1);
+        cbTimeFull.setPadding(new javafx.geometry.Insets(0,0,0,5));
+         HBox hbox2 = new HBox();       
+        hbox2.getChildren().addAll(rbTimeFull, cbTimeFull);
         Separator separatorTop = new Separator();
         Separator separatorBottom = new Separator();
         VBox vb = new VBox();
         vb.setSpacing(5.0);        
-        vb.getChildren().addAll(separatorTop, groupLabel,rbFull,hbox,separatorBottom);
-            
+        vb.getChildren().addAll(separatorTop, groupLabel,rbFull,hbox, hbox2, separatorBottom);
+        
+        CheckBox cbSave = new CheckBox();
+         cbSave.setText("Сохранить настройки в файл конфигурации");
+         cbSave.setSelected(false);
+        
                 Button okButton = new Button("Сохранить");
                 okButton.setId("glass-grey");
                  okButton.setOnAction(new EventHandler<ActionEvent>(){ 
@@ -325,8 +348,16 @@ public class FXMLDocumentController implements Initializable {
                        lblTeamRed.setText(tfRedTeamName.getText());
                    if (tfRedTeamName.getText().length() >= 20)
                        lblTeamRed.setText(tfRedTeamName.getText().substring(0, 19));
-                   if (groupRB.getSelectedToggle() == rbTime)
+                   if (groupRB.getSelectedToggle() == rbTime){
                        dTimeRemain =  Double.parseDouble(cbTime.getValue().toString());
+                       dTimeFull = 60.0;
+                        }
+                   if (groupRB.getSelectedToggle() == rbTimeFull){                       
+                       dTimeFull = Double.parseDouble(cbTimeFull.getValue().toString());
+                       dTimeRemain = 0.0;
+                       }
+                   if (cbSave.isSelected())
+                       saveParamChanges();
                    secondStage.close();
                   }                 
                 });
@@ -350,8 +381,9 @@ public class FXMLDocumentController implements Initializable {
         gridPane.add(lbGreenKey, 0, 3);
         gridPane.add(tfGreenKey, 1, 3);
         gridPane.add(vb, 0, 4,2,1);
-        gridPane.add(okButton, 0,5);  
-        gridPane.add(noButton, 1,5);  
+        gridPane.add(cbSave, 0, 5,2,1);
+        gridPane.add(okButton, 0,6);  
+        gridPane.add(noButton, 1,6);  
         gridPane.setHalignment(okButton, HPos.CENTER);
         gridPane.setHalignment(noButton, HPos.CENTER);
                 
@@ -360,9 +392,49 @@ public class FXMLDocumentController implements Initializable {
         }       
     }
     
+    public void saveParamChanges() {
+    try {
+        Properties props = new Properties();
+        props.setProperty("keyTeamGreen", keyTeamGreen.getName());        
+        props.setProperty("keyTeamRed",  keyTeamRed.getName());         
+        props.setProperty("dTimeRemain",  Double.toString(dTimeRemain));
+        props.setProperty("dTimeFull",  Double.toString(dTimeFull));
+        File f = new File("brain.properties");
+        OutputStream out = new FileOutputStream( f );
+        props.store(out, "Кооментарий");
+        }
+    catch (Exception e ) {  
+        
+        }
+    }
+    public void loadParams() {
+    Properties props = new Properties();
+    InputStream is = null; 
+    try {
+        File f = new File("brain.properties");
+        is = new FileInputStream( f );
+        }
+    catch ( Exception e ) { is = null; }
+ 
+    try {
+        if ( is == null ) {           
+            is = getClass().getResourceAsStream("brain.properties");
+        } 
+        props.load( is );
+    }
+    catch ( Exception e ) { }
+ 
+    keyTeamGreen = KeyCode.getKeyCode (props.getProperty("keyTeamGreen", "Shift"));
+    keyTeamRed= KeyCode.getKeyCode(props.getProperty("keyTeamRed", "Ctrl"));
+    dTimeFull = new Double(props.getProperty("dTimeFull", "60.0"));
+    dTimeRemain  = new Double(props.getProperty("dTimeRemain", "0.0"));
+    }
+    
     private void playsignal (String path){        
-       Media someSound = new Media(getClass().getResource(path).toString());
+       /*Media someSound = new Media(getClass().getResource(path).toString());
         MediaPlayer mp = new MediaPlayer(someSound);
-        mp.play();
+        mp.play();*/
+        AudioClip sound = new AudioClip(getClass().getResource(path).toString());
+        sound.play();
       }
 }
