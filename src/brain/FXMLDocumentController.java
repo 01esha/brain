@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -80,8 +81,9 @@ public class FXMLDocumentController implements Initializable {
    public boolean bgreenpush = false;
    public boolean btnblock = false;
    public double dTimeRemain = 0.0;
-   //private int iTimeCount = 0;
+   private long lTimeCount = 0;
    private double dTimeFull = 60.0; 
+   private double dTimeTemp = 0.0;
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -122,6 +124,7 @@ public class FXMLDocumentController implements Initializable {
                 if (event.getCode() == keyTeamRed && !bredpush &&!btnblock) {
                     if (bTimerStart) {
                         playsignal("/sound/push.mp3");
+                        TimeAccuarte();
                         btnblock = true;
                         bredpush = true;
                         redLed.setOn(true);
@@ -143,6 +146,7 @@ public class FXMLDocumentController implements Initializable {
                     if (event.getCode() == keyTeamGreen && !bgreenpush &&!btnblock){
                         if (bTimerStart){
                             playsignal("/sound/push.mp3");
+                           TimeAccuarte();
                             btnblock = true;
                             bgreenpush = true;
                             greenLed.setOn(true);
@@ -167,10 +171,10 @@ public class FXMLDocumentController implements Initializable {
     } 
     
     @FXML protected void btnStartClick() {    
-       btnStart.setDisable(true);       
-       lastTimerCall = System.nanoTime();
+       btnStart.setDisable(true);             
        playsignal("/sound/start.mp3");      
        lastTimerCall = System.nanoTime(); 
+       lTimeCount= System.nanoTime(); 
        AnimTimer = new AnimationTimer() {
             @Override public void handle(long now) {
                 if (now > lastTimerCall + 1000_000_000) {
@@ -210,6 +214,8 @@ public class FXMLDocumentController implements Initializable {
     btnStart.setDisable(false);
     btnCont.setDisable(true);
     lblTimeOff.setVisible(false);
+    dTimeTemp=0.0;
+    controlTimer.setTitle("Время");
     }
     
     @FXML protected void btnContClick(ActionEvent event) {
@@ -319,7 +325,7 @@ public class FXMLDocumentController implements Initializable {
         HBox hbox = new HBox();       
         hbox.getChildren().addAll(rbTime, cbTime);
         ChoiceBox cbTimeFull = new ChoiceBox(FXCollections.observableArrayList(
-            "15", "20", "25", "30")
+            "15", "20", "25", "30", "60")
             );
         cbTimeFull.getSelectionModel().select(1);
         cbTimeFull.setPadding(new javafx.geometry.Insets(0,0,0,5));
@@ -390,6 +396,18 @@ public class FXMLDocumentController implements Initializable {
                 
         secondStage.show();
         }       
+    }
+    
+    private void TimeAccuarte(){
+        double  d = (System.nanoTime()-lTimeCount)/1000000000.0;
+        if (dTimeTemp !=0.0) {
+            int itemp = (int)dTimeTemp;
+            dTimeTemp = (double) itemp;
+            dTimeTemp+=d;
+        }
+        else  dTimeTemp=d;        
+        DecimalFormat format = new DecimalFormat("##.###"); 
+        controlTimer.setTitle(String.valueOf(format.format(dTimeTemp)));       
     }
     
     public void saveParamChanges() {
