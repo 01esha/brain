@@ -123,7 +123,7 @@ public class FXMLDocumentController implements Initializable {
             public void handle(KeyEvent event) {                
                 if (event.getCode() == keyTeamRed && !bredpush &&!btnblock) {
                     if (bTimerStart) {
-                        playsignal("/sound/push.mp3");
+                        playsignal("/sound/push.wav");
                         TimeAccuarte();
                         btnblock = true;
                         bredpush = true;
@@ -134,7 +134,7 @@ public class FXMLDocumentController implements Initializable {
                         if (!bgreenpush) btnCont.setDisable(false);
                     }
                     else{
-                        playsignal("/sound/falsestart.mp3");
+                        playsignal("/sound/falsestart.wav");
                         btnblock = true;
                         lblFalseRed.setVisible(true);                        
                         redLed.setBlinking(true);
@@ -145,7 +145,7 @@ public class FXMLDocumentController implements Initializable {
                 } else 
                     if (event.getCode() == keyTeamGreen && !bgreenpush &&!btnblock){
                         if (bTimerStart){
-                            playsignal("/sound/push.mp3");
+                            playsignal("/sound/push.wav");
                            TimeAccuarte();
                             btnblock = true;
                             bgreenpush = true;
@@ -156,7 +156,7 @@ public class FXMLDocumentController implements Initializable {
                             if (!bredpush) btnCont.setDisable(false);
                         }
                         else{ 
-                            playsignal("/sound/falsestart.mp3");
+                            playsignal("/sound/falsestart.wav");
                             btnblock = true;
                             lblFalseGreen.setVisible(true);
                             greenLed.setBlinking(true);                        
@@ -172,7 +172,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML protected void btnStartClick() {    
        btnStart.setDisable(true);             
-       playsignal("/sound/start.mp3");      
+       playsignal("/sound/start.wav");      
        lastTimerCall = System.nanoTime(); 
        lTimeCount= System.nanoTime(); 
        AnimTimer = new AnimationTimer() {
@@ -182,7 +182,7 @@ public class FXMLDocumentController implements Initializable {
                     if (controlTimer.getValue() >= dTimeFull){
                         lblTimeOff.setVisible(true);
                         AnimTimer.stop();
-                        playsignal("/sound/start.mp3");
+                        playsignal("/sound/start.wav");
                     }                       
                     lastTimerCall = now;                }
             }
