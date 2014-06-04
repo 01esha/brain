@@ -124,7 +124,7 @@ public class FXMLDocumentController implements Initializable {
                 if (event.getCode() == keyTeamRed && !bredpush &&!btnblock) {
                     if (bTimerStart) {
                         playsignal("/sound/push.wav");
-                        TimeAccuarte();
+                        TimeAccurate();
                         btnblock = true;
                         bredpush = true;
                         redLed.setOn(true);
@@ -146,7 +146,7 @@ public class FXMLDocumentController implements Initializable {
                     if (event.getCode() == keyTeamGreen && !bgreenpush &&!btnblock){
                         if (bTimerStart){
                             playsignal("/sound/push.wav");
-                           TimeAccuarte();
+                            TimeAccurate();
                             btnblock = true;
                             bgreenpush = true;
                             greenLed.setOn(true);
@@ -183,6 +183,7 @@ public class FXMLDocumentController implements Initializable {
                         lblTimeOff.setVisible(true);
                         AnimTimer.stop();
                         playsignal("/sound/start.wav");
+                        btnblock = true;
                     }                       
                     lastTimerCall = now;                }
             }
@@ -219,26 +220,20 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML protected void btnContClick(ActionEvent event) {
-     if (!bTimerStart){
         btnblock = false;
-        btnStart.setDisable(false);
+        if ( !bredpush | !bgreenpush )
+            btnStart.setDisable(false);
         btnCont.setDisable(true);                
         if (bredpush)
              redLed.setBlinking(false);
         if (bgreenpush)
             greenLed.setBlinking(false);
-     }
-     else {        
-        btnblock = false;        
         if (bredpush)
              redLed.setOn(false);
         if (bgreenpush)
             greenLed.setOn(false);
         if (dTimeRemain > 0.0)
-            controlTimer.setValue(60.0-dTimeRemain);
-        btnStart.setDisable(false);
-        }     
-     btnCont.setDisable(true);     
+            controlTimer.setValue(60.0-dTimeRemain);     
      }
    
     @FXML protected void btnPropertyClick(ActionEvent event) {
@@ -333,9 +328,10 @@ public class FXMLDocumentController implements Initializable {
         hbox2.getChildren().addAll(rbTimeFull, cbTimeFull);
         Separator separatorTop = new Separator();
         Separator separatorBottom = new Separator();
+        Separator separatorCent = new Separator();
         VBox vb = new VBox();
         vb.setSpacing(5.0);        
-        vb.getChildren().addAll(separatorTop, groupLabel,rbFull,hbox, hbox2, separatorBottom);
+        vb.getChildren().addAll(separatorTop, groupLabel,rbFull,hbox,separatorCent, hbox2, separatorBottom);
         
         CheckBox cbSave = new CheckBox();
          cbSave.setText("Сохранить настройки в файл конфигурации");
@@ -398,7 +394,7 @@ public class FXMLDocumentController implements Initializable {
         }       
     }
     
-    private void TimeAccuarte(){
+    private void TimeAccurate(){
         double  d = (System.nanoTime()-lTimeCount)/1000000000.0;
         if (dTimeTemp !=0.0) {
             int itemp = (int)dTimeTemp;
