@@ -194,12 +194,7 @@ public class FXMLDocumentController implements Initializable {
        bTimerStart = true;  
     }
     
-    @FXML protected void btnStopClick(ActionEvent event) {
-       /*        
-        double  d = (System.nanoTime()-lastTimerCall)/1000000000.0;
-        DecimalFormat format = new DecimalFormat("##.####"); 
-        controlTimer.setTitle(String.valueOf(format.format(d)));
-               */
+    @FXML protected void btnStopClick(ActionEvent event) {       
     if (bTimerStart) AnimTimer.stop();
     //timer.cancel();           
     bTimerStart = false;   
@@ -245,8 +240,8 @@ public class FXMLDocumentController implements Initializable {
             greenLed.setOn(false);
         if (dTimeRemain > 0.0)
             controlTimer.setValue(60.0-dTimeRemain);
-        if ((lblFalseGreen.isVisible() && lblFalseGreen.getText() =="Фальстарт") )
-             //| (lblFalseRed.isVisible()&lblFalseRed.getText()=="Фальстарт"))
+        if ((lblFalseGreen.isVisible() && "Фальстарт".equals(lblFalseGreen.getText())) 
+             | (lblFalseRed.isVisible() && "Фальстарт".equals(lblFalseRed.getText())))
             btnStart.setDisable(false);
         else AnimTimerStart();
      }
@@ -430,7 +425,7 @@ public class FXMLDocumentController implements Initializable {
         props.setProperty("dTimeFull",  Double.toString(dTimeFull));
         File f = new File("brain.properties");
         OutputStream out = new FileOutputStream( f );
-        props.store(out, "Кооментарий");
+        props.store(out, "Properties of application");
         }
     catch (Exception e ) {  
         
