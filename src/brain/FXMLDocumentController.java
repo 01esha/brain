@@ -166,13 +166,15 @@ public class FXMLDocumentController implements Initializable {
                         }
             }
             }});
-    
-    
     } 
     
-    @FXML protected void btnStartClick() {    
+    @FXML protected void btnStartClick() {           
+       AnimTimerStart();           
+    }
+    
+    private void AnimTimerStart(){
        btnStart.setDisable(true);             
-       playsignal("/sound/start.wav");      
+       playsignal("/sound/start.wav");   
        lastTimerCall = System.nanoTime(); 
        lTimeCount= System.nanoTime(); 
        AnimTimer = new AnimationTimer() {
@@ -188,10 +190,9 @@ public class FXMLDocumentController implements Initializable {
                     lastTimerCall = now;                }
             }
         };
-     AnimTimer.start();
-     bTimerStart = true;      
+       AnimTimer.start();
+       bTimerStart = true;  
     }
-    
     
     @FXML protected void btnStopClick(ActionEvent event) {
        /*        
@@ -217,13 +218,23 @@ public class FXMLDocumentController implements Initializable {
     lblTimeOff.setVisible(false);
     dTimeTemp=0.0;
     controlTimer.setTitle("Время");
+    lblFalseRed.setText("Фальстарт");
+    lblFalseGreen.setText("Фальстарт");
     }
     
     @FXML protected void btnContClick(ActionEvent event) {
         btnblock = false;
+        btnCont.setDisable(true);
         if ( !bredpush | !bgreenpush )
             btnStart.setDisable(false);
-        btnCont.setDisable(true);                
+        if (bredpush & !lblFalseRed.isVisible()){
+            lblFalseRed.setText("Неверный ответ");
+            lblFalseRed.setVisible(true);
+        }            
+        if (bgreenpush & !lblFalseGreen.isVisible()){
+            lblFalseGreen.setText("Неверный ответ");
+            lblFalseGreen.setVisible(true);
+        }            
         if (bredpush)
              redLed.setBlinking(false);
         if (bgreenpush)
@@ -233,7 +244,8 @@ public class FXMLDocumentController implements Initializable {
         if (bgreenpush)
             greenLed.setOn(false);
         if (dTimeRemain > 0.0)
-            controlTimer.setValue(60.0-dTimeRemain);     
+            controlTimer.setValue(60.0-dTimeRemain);
+        AnimTimerStart();
      }
    
     @FXML protected void btnPropertyClick(ActionEvent event) {
