@@ -234,7 +234,7 @@ public class FXMLDocumentController implements Initializable {
         if (bgreenpush & !lblFalseGreen.isVisible()){
             lblFalseGreen.setText("Неверный ответ");
             lblFalseGreen.setVisible(true);
-        }            
+        }        
         if (bredpush)
              redLed.setBlinking(false);
         if (bgreenpush)
@@ -245,7 +245,10 @@ public class FXMLDocumentController implements Initializable {
             greenLed.setOn(false);
         if (dTimeRemain > 0.0)
             controlTimer.setValue(60.0-dTimeRemain);
-        AnimTimerStart();
+        if ((lblFalseGreen.isVisible() && lblFalseGreen.getText() =="Фальстарт") )
+             //| (lblFalseRed.isVisible()&lblFalseRed.getText()=="Фальстарт"))
+            btnStart.setDisable(false);
+        else AnimTimerStart();
      }
    
     @FXML protected void btnPropertyClick(ActionEvent event) {
